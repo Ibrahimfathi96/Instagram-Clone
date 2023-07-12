@@ -19,12 +19,16 @@ class AddPostScreen extends StatefulWidget {
 class _AddPostScreenState extends State<AddPostScreen> {
   Uint8List? _file;
   final TextEditingController _descriptionController = TextEditingController();
+  bool _isLoading = false;
 
   void postImage(
     String uid,
     String userName,
     String profileImage,
   ) async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
       String res = await FirebaseFireStoreMethods().uploadPost(
         _descriptionController.text,
@@ -34,8 +38,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
         profileImage,
       );
       if (res == 'success') {
-        showSnakeBar(context, "Posted");
+        setState(() {
+          _isLoading = false;
+        });
+        showSnakeBar(context, "Posted!");
+        clearImage();
       } else {
+        setState(() {
+          _isLoading = false;
+        });
         showSnakeBar(context, "${res.toString()}");
       }
     } catch (error) {
@@ -107,23 +118,41 @@ class _AddPostScreenState extends State<AddPostScreen> {
     super.dispose();
   }
 
+  clearImage() {
+    setState(() {
+      _file = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final MyUser user = Provider.of<UserProvider>(context).getUser;
     return _file == null
         ? Center(
-            child: IconButton(
-              onPressed: () => _selectImage(context),
-              icon: Icon(
-                Icons.upload,
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () => _selectImage(context),
+                  icon: Icon(
+                    Icons.upload,size: 40,
+                  ),
+                ),
+                Text(
+                  "Choose your image",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
           )
         : Scaffold(
             appBar: AppBar(
               backgroundColor: mobileBackgroundColor,
               leading: IconButton(
-                onPressed: () {},
+                onPressed: clearImage,
                 icon: Icon(
                   Icons.arrow_back_ios,
                 ),
@@ -149,6 +178,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
             ),
             body: Column(
               children: [
+                _isLoading
+                    ? LinearProgressIndicator()
+                    : Padding(
+                        padding: EdgeInsets.only(top: 0),
+                      ),
+                Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
