@@ -9,6 +9,13 @@ class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
+  Future<MyUser> getUserDetails() async {
+    User currentUser = _auth.currentUser!;
+    DocumentSnapshot snapshot =
+        await _fireStore.collection('user').doc(currentUser.uid).get();
+    return MyUser.fromSnap(snapshot);
+  }
+
   //user signing up
   Future<String> userSignUp({
     required String email,
@@ -44,6 +51,12 @@ class AuthMethods {
             );
         res = 'success';
       }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
     } catch (error) {
       res = error.toString();
     }
@@ -62,6 +75,12 @@ class AuthMethods {
         res = "successfully logged in";
       } else {
         res = "all Fields are required";
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
       }
     } catch (e) {
       res = e.toString();

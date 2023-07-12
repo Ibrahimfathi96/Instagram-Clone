@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class MyUser {
   final String email;
   final String uid;
@@ -28,20 +30,16 @@ class MyUser {
     };
   }
 
-  factory MyUser.fromJson(Map<String, dynamic> json) {
+  static MyUser fromSnap(DocumentSnapshot snap) {
+    var snapShot = snap.data() as Map<String, dynamic>;
     return MyUser(
-      email: json["email"],
-      uid: json["uid"],
-      photoUrl: json["photoUrl"],
-      userName: json["userName"],
-      bio: json["bio"],
-      followers: List.of(json["followers"])
-          .map((i) => i /* can't generate it properly yet */)
-          .toList(),
-      following: List.of(json["following"])
-          .map((i) => i /* can't generate it properly yet */)
-          .toList(),
+      email: snapShot["email"],
+      uid: snapShot["uid"],
+      photoUrl: snapShot["photoUrl"],
+      userName: snapShot["userName"],
+      bio: snapShot["bio"],
+      followers: snapShot["followers"],
+      following: snapShot["following"],
     );
   }
-//
 }
