@@ -18,6 +18,10 @@ dependencies:
   firebase_app_check: ^0.1.5
   provider: ^6.0.5
   uuid: ^3.0.7
+  font_awesome_flutter: ^10.5.0
+  jiffy: ^6.2.1
+  intl: ^0.18.1
+  timeago: ^3.5.0
 
 
 dev_dependencies:
