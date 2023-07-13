@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class AnimationWidget extends StatefulWidget {
+class LikeAnimation extends StatefulWidget {
   final Widget child;
   final bool isAnimating;
   final Duration duration;
   final VoidCallback? onEnd;
   final bool smallLike;
 
-  const AnimationWidget({
+  const LikeAnimation({
     super.key,
     required this.child,
     required this.isAnimating,
@@ -17,10 +17,10 @@ class AnimationWidget extends StatefulWidget {
   });
 
   @override
-  State<AnimationWidget> createState() => _AnimationWidgetState();
+  State<LikeAnimation> createState() => _LikeAnimationState();
 }
 
-class _AnimationWidgetState extends State<AnimationWidget>
+class _LikeAnimationState extends State<LikeAnimation>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> scale;
@@ -38,7 +38,7 @@ class _AnimationWidgetState extends State<AnimationWidget>
   }
 
   @override
-  void didUpdateWidget(covariant AnimationWidget oldWidget) {
+  void didUpdateWidget(covariant LikeAnimation oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.isAnimating != oldWidget.isAnimating) {
       startAnimation();
