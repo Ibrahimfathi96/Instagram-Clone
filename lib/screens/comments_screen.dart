@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/model/my_user.dart';
 import 'package:instagram_clone/providers/user_provider.dart';
@@ -26,9 +27,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final MyUser user = Provider
-        .of<UserProvider>(context)
-        .getUser;
+    final MyUser user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: mobileBackgroundColor,
@@ -41,15 +40,33 @@ class _CommentsScreenState extends State<CommentsScreen> {
         ),
         title: Text('Comments'),
       ),
-      body: CommentCard(),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('posts')
+            .doc(widget.snap['postId'])
+            .collection('comments')
+            .orderBy("datePublished", descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return ListView.builder(
+            physics: BouncingScrollPhysics(),
+            itemCount: (snapshot.data! as dynamic).docs.length,
+            itemBuilder: (context, index) => CommentCard(
+              snap: (snapshot.data! as dynamic).docs[index].data(),
+            ),
+          );
+        },
+      ),
       bottomNavigationBar: SafeArea(
         child: Container(
           height: kToolbarHeight,
           margin:
-          EdgeInsets.only(bottom: MediaQuery
-              .of(context)
-              .viewInsets
-              .bottom),
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           padding: EdgeInsets.only(left: 16, right: 8),
           child: Row(
             children: [
@@ -80,6 +97,9 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     user.photoUrl,
                     user.userName,
                   );
+                  setState(() {
+                    _commentController.clear();
+                  });
                 },
                 child: Container(
                   padding: EdgeInsets.all(8),

@@ -84,6 +84,7 @@ class FirebaseFireStoreMethods {
           "commentContent": commentContent,
           "commentId": commentId,
           "datePublished": DateTime.now(),
+          "likes":[],
         });
       } else {
         debugPrint("Text is Empty.");
