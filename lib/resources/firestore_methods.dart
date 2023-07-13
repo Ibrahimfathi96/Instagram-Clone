@@ -61,4 +61,35 @@ class FirebaseFireStoreMethods {
       debugPrint("like posts errors ${error.toString()}");
     }
   }
+
+  Future<void> postComment(
+    String postId,
+    String commentContent,
+    String uid,
+    String profileImage,
+    String userName,
+  ) async {
+    try {
+      if (commentContent.isNotEmpty) {
+        String commentId = Uuid().v1();
+        await _fireStore
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentId)
+            .set({
+          "profileImage": profileImage,
+          "userName": userName,
+          "uid": uid,
+          "commentContent": commentContent,
+          "commentId": commentId,
+          "datePublished": DateTime.now(),
+        });
+      } else {
+        debugPrint("Text is Empty.");
+      }
+    } catch (error) {
+      debugPrint("Post Comment Error ${error.toString()}");
+    }
+  }
 }

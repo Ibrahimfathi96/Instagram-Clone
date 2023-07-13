@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:instagram_clone/model/my_user.dart';
 import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
+import 'package:instagram_clone/screens/comments_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/widgets/animation.dart';
 import 'package:intl/intl.dart';
@@ -22,9 +23,7 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
-    final MyUser user = Provider
-        .of<UserProvider>(context)
-        .getUser;
+    final MyUser user = Provider.of<UserProvider>(context).getUser;
     return Container(
       color: mobileBackgroundColor,
       padding: EdgeInsets.symmetric(
@@ -67,28 +66,26 @@ class _PostCardState extends State<PostCard> {
                   onPressed: () {
                     showDialog(
                       context: context,
-                      builder: (context) =>
-                          Dialog(
-                            child: ListView(
-                              padding: EdgeInsets.symmetric(vertical: 16),
-                              shrinkWrap: true,
-                              children: [
-                                "Delete",
-                              ]
-                                  .map(
-                                    (e) =>
-                                    InkWell(
-                                      onTap: () {},
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 12, horizontal: 16),
-                                        child: Text(e),
-                                      ),
-                                    ),
+                      builder: (context) => Dialog(
+                        child: ListView(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          shrinkWrap: true,
+                          children: [
+                            "Delete",
+                          ]
+                              .map(
+                                (e) => InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 12, horizontal: 16),
+                                    child: Text(e),
+                                  ),
+                                ),
                               )
-                                  .toList(),
-                            ),
-                          ),
+                              .toList(),
+                        ),
+                      ),
                     );
                   },
                   icon: Icon(
@@ -112,9 +109,7 @@ class _PostCardState extends State<PostCard> {
               alignment: Alignment.center,
               children: [
                 SizedBox(
-                  height: MediaQuery
-                      .sizeOf(context)
-                      .height * 0.6,
+                  height: MediaQuery.sizeOf(context).height * 0.6,
                   width: double.infinity,
                   child: Image.network(
                     widget.snap['postUrl'],
@@ -154,17 +149,23 @@ class _PostCardState extends State<PostCard> {
                     await FirebaseFireStoreMethods().likePost(
                         widget.snap['postId'], user.uid, widget.snap['likes']);
                   },
-                  icon:
-                  widget.snap['likes'].contains(user.uid) ?
-                  Icon(
-                    Icons.favorite,
-                  ):Icon(
-                    Icons.favorite_border,
-                  ),
+                  icon: widget.snap['likes'].contains(user.uid)
+                      ? Icon(
+                          Icons.favorite,
+                        )
+                      : Icon(
+                          Icons.favorite_border,
+                        ),
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CommentsScreen(
+                      snap: widget.snap,
+                    ),
+                  ),
+                ),
                 icon: Icon(
                   FontAwesomeIcons.comment,
                 ),
@@ -199,13 +200,9 @@ class _PostCardState extends State<PostCard> {
               children: [
                 Text(
                   "${widget.snap['likes'].length} likes",
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 Container(
                   width: double.infinity,
