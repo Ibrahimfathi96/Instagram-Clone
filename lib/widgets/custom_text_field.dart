@@ -7,26 +7,29 @@ class CustomTextField extends StatelessWidget {
   final TextInputType textInputType;
 
   const CustomTextField(
-      {Key? key, required this.hintText, required this.textEditingController, this.isPass = false, required this.textInputType})
+      {Key? key,
+      required this.hintText,
+      required this.textEditingController,
+      this.isPass = false,
+      required this.textInputType})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final inputBorder = OutlineInputBorder(
-        borderSide: Divider.createBorderSide(context)
-    );
+    final inputBorder =
+        OutlineInputBorder(borderSide: Divider.createBorderSide(context));
     return TextField(
       decoration: InputDecoration(
-          hintText: hintText,
-          border: inputBorder,
-          focusedBorder: inputBorder,
-          enabledBorder: inputBorder,
-          filled: true,
-          contentPadding: const EdgeInsets.all(8)
+        hintText: hintText,
+        border: inputBorder,
+        focusedBorder: inputBorder,
+        enabledBorder: inputBorder,
+        filled: true,
+        contentPadding: const EdgeInsets.all(8),
       ),
-      keyboardType:textInputType,
-      obscureText:isPass,
-      controller:textEditingController,
+      keyboardType: textInputType,
+      obscureText: isPass,
+      controller: textEditingController,
     );
   }
 }

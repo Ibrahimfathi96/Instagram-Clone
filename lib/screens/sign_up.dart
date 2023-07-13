@@ -61,12 +61,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       password: _passwordController.text,
       userName: _userNameController.text,
       bio: _bioController.text,
-      file: _image!,
+      file: _image,
     );
-
-    setState(() {
-      _isLoading = false;
-    });
 
     if (res != 'success') {
       if (!mounted) return;
@@ -82,56 +78,59 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       );
     }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: ListView(
+            physics: BouncingScrollPhysics(),
             children: [
-              Flexible(
-                flex: 2,
-                child: Container(),
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height / 16,
               ),
               //svg instagram image
               SvgPicture.asset(
                 "assets/ic_instagram.svg",
                 color: primaryColor,
-                height: 64,
+                height: MediaQuery.sizeOf(context).height / 14,
               ),
-              const SizedBox(
-                height: 64,
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height / 16,
               ),
               //circular widget to accept and show out accepted file
-              Stack(
-                children: [
-                  _image != null
-                      ? CircleAvatar(
-                          radius: 64, backgroundImage: MemoryImage(_image!))
-                      : const CircleAvatar(
-                          radius: 64,
-                          backgroundImage: AssetImage(
-                            "assets/pp.jpg",
+              Center(
+                child: Stack(
+                  children: [
+                    _image != null
+                        ? CircleAvatar(
+                            radius: 64, backgroundImage: MemoryImage(_image!))
+                        : const CircleAvatar(
+                            radius: 64,
+                            backgroundImage: AssetImage(
+                              "assets/pp.jpg",
+                            ),
                           ),
-                        ),
-                  Positioned(
-                    bottom: -10,
-                    left: 80,
-                    child: IconButton(
-                      onPressed: selectImage,
-                      icon: const Icon(Icons.add_a_photo_rounded),
+                    Positioned(
+                      bottom: -10,
+                      left: 80,
+                      child: IconButton(
+                        onPressed: selectImage,
+                        icon: const Icon(Icons.add_a_photo_rounded),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              const SizedBox(
-                height: 24,
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height / 36,
               ),
               //text form field for user name
               CustomTextField(
@@ -139,8 +138,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 textEditingController: _userNameController,
                 textInputType: TextInputType.text,
               ),
-              const SizedBox(
-                height: 24,
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height / 36,
               ),
               //text form field for email
               CustomTextField(
@@ -148,8 +147,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 textEditingController: _emailController,
                 textInputType: TextInputType.emailAddress,
               ),
-              const SizedBox(
-                height: 24,
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height / 36,
               ),
               //text form field for password
               CustomTextField(
@@ -158,8 +157,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 textInputType: TextInputType.visiblePassword,
                 isPass: true,
               ),
-              const SizedBox(
-                height: 24,
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height / 36,
               ),
               //text field for user bio
               CustomTextField(
@@ -167,8 +166,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 textEditingController: _bioController,
                 textInputType: TextInputType.text,
               ),
-              const SizedBox(
-                height: 24,
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height / 36,
               ),
               //login button
               InkWell(
@@ -197,12 +196,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                 ),
               ),
-              const SizedBox(
-                height: 12,
-              ),
-              Flexible(
-                flex: 2,
-                child: Container(),
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height / 7,
               ),
               //transition to sign up/in screen
               Row(
@@ -222,7 +217,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       child: const Text(
                         "Sign in.",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),

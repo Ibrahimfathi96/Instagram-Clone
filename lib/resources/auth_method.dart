@@ -24,7 +24,7 @@ class AuthMethods {
     required String bio,
     Uint8List? file,
   }) async {
-    String res = "Some error occurred";
+    String res = "something went wrong with your inputs, try again.";
     try {
       if (email.isNotEmpty ||
           password.isNotEmpty ||
