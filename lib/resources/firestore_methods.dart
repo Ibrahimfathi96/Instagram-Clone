@@ -46,6 +46,7 @@ class FirebaseFireStoreMethods {
     return res;
   }
 
+  //Post likes
   Future<void> likePost(String postId, String uid, List likes) async {
     try {
       if (likes.contains(uid)) {
@@ -62,6 +63,7 @@ class FirebaseFireStoreMethods {
     }
   }
 
+  //Post Comments
   Future<void> postComment(
     String postId,
     String commentContent,
@@ -84,13 +86,24 @@ class FirebaseFireStoreMethods {
           "commentContent": commentContent,
           "commentId": commentId,
           "datePublished": DateTime.now(),
-          "likes":[],
+          "likes": [],
         });
       } else {
         debugPrint("Text is Empty.");
       }
     } catch (error) {
       debugPrint("Post Comment Error ${error.toString()}");
+    }
+  }
+
+  //Deleting Post
+  Future<void> deletePost(
+    String postId,
+  ) async {
+    try {
+      await _fireStore.collection('posts').doc(postId).delete();
+    } catch (error) {
+      debugPrint("deleting posts error ${error.toString()}");
     }
   }
 }
