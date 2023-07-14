@@ -15,6 +15,7 @@ class FeedScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: mobileBackgroundColor,
         centerTitle: false,
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             onPressed: () {},

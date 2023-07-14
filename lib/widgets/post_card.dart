@@ -137,11 +137,11 @@ class _PostCardState extends State<PostCard> {
               alignment: Alignment.center,
               children: [
                 SizedBox(
-                  height: MediaQuery.sizeOf(context).height * 0.6,
+                  height: MediaQuery.sizeOf(context).height * 0.5,
                   width: double.infinity,
                   child: Image.network(
                     widget.snap['postUrl'],
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
                   ),
                 ),
                 AnimatedOpacity(
