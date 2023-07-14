@@ -106,4 +106,29 @@ class FirebaseFireStoreMethods {
       debugPrint("deleting posts error ${error.toString()}");
     }
   }
+
+  Future<void> followUser(String uid, String followId) async {
+    try {
+      DocumentSnapshot snapshot =
+          await _fireStore.collection('user').doc(uid).get();
+      List following = (snapshot.data()! as dynamic)['following'];
+      if (following.contains(followId)) {
+        await _fireStore.collection('user').doc(followId).update({
+          'followers': FieldValue.arrayRemove([uid]),
+        });
+        await _fireStore.collection('user').doc(uid).update({
+          'following': FieldValue.arrayRemove([followId]),
+        });
+      } else {
+        await _fireStore.collection('user').doc(followId).update({
+          'followers': FieldValue.arrayUnion([uid]),
+        });
+        await _fireStore.collection('user').doc(uid).update({
+          'following': FieldValue.arrayUnion([followId]),
+        });
+      }
+    } catch (error) {
+      debugPrint("followUserError${error.toString()}");
+    }
+  }
 }
