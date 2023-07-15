@@ -15,6 +15,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   late PageController pageController;
 
   void navigateOnTapping(int page) {
+    //Animation Page
     pageController.jumpToPage(page);
   }
 
@@ -42,11 +43,12 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
       bottomNavigationBar: CupertinoTabBar(
         backgroundColor: mobileBackgroundColor,
         onTap: navigateOnTapping,
-        items: [
+        currentIndex: _page,
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home,
-              color: _page == 0 ? primaryColor : secondaryColor,
+              color: (_page == 0) ? primaryColor : secondaryColor,
             ),
             label: "",
             backgroundColor: primaryColor,
@@ -54,7 +56,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.search_outlined,
-              color: _page == 1 ? primaryColor : secondaryColor,
+              color: (_page == 1) ? primaryColor : secondaryColor,
             ),
             label: "",
             backgroundColor: primaryColor,
@@ -62,7 +64,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.add_circle,
-              color: _page == 2 ? primaryColor : secondaryColor,
+              color: (_page == 2) ? primaryColor : secondaryColor,
             ),
             label: "",
             backgroundColor: primaryColor,
@@ -70,7 +72,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.favorite,
-              color: _page == 3 ? primaryColor : secondaryColor,
+              color: (_page == 3) ? primaryColor : secondaryColor,
             ),
             label: "",
             backgroundColor: primaryColor,
@@ -78,7 +80,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person,
-              color: _page == 4 ? primaryColor : secondaryColor,
+              color: (_page == 4) ? primaryColor : secondaryColor,
             ),
             label: "",
             backgroundColor: primaryColor,
@@ -86,7 +88,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
         ],
       ),
       body: PageView(
-        physics: NeverScrollableScrollPhysics(),
+        physics: BouncingScrollPhysics(),
         controller: pageController,
         onPageChanged: onPageChanged,
         children: homeScreenItems,

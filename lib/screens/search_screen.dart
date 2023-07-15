@@ -46,72 +46,65 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
       body: isShowUser
           ? FutureBuilder(
-              future: FirebaseFirestore.instance
-                  .collection('user')
-                  .where(
-                    'userName',
-                    isGreaterThanOrEqualTo: _searchController.text,
-                  )
-                  .get(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return ListView.builder(
-                  itemCount: (snapshot.data! as dynamic).docs.length,
-                  itemBuilder: (context, index) => InkWell(
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ProfileScreen(
-                          uid: (snapshot.data! as dynamic).docs[index]['uid'],
+        future: FirebaseFirestore.instance
+            .collection('user')
+            .where(
+          'userName',
+          isGreaterThanOrEqualTo: _searchController.text,
+        )
+            .get(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return ListView.builder(
+            itemCount: (snapshot.data! as dynamic).docs.length,
+            itemBuilder: (context, index) =>
+                InkWell(
+                  onTap: () =>
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ProfileScreen(
+                                uid: (snapshot.data! as dynamic)
+                                    .docs[index]['uid'],
+                              ),
                         ),
                       ),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                          (snapshot.data! as dynamic).docs[index]
+                          ['photoUrl']),
                     ),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            (snapshot.data! as dynamic).docs[index]
-                                ['photoUrl']),
-                      ),
-                      title: Text(
-                          (snapshot.data! as dynamic).docs[index]['userName']),
-                    ),
+                    title: Text(
+                        (snapshot.data! as dynamic).docs[index]['userName']),
                   ),
-                );
-              },
-            )
+                ),
+          );
+        },
+      )
           : FutureBuilder(
-              future: FirebaseFirestore.instance.collection('posts').get(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return StaggeredGridView.countBuilder(
-                  crossAxisCount: 3,
-                  itemCount: (snapshot.data! as dynamic).docs.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Image.network(
-                        (snapshot.data! as dynamic).docs[index]['postUrl']);
-                  },
-                  staggeredTileBuilder: (int index) =>
-                      MediaQuery.sizeOf(context).width > webScreenSize
-                          ? StaggeredTile.count(
-                              (index % 7 == 0) ? 1 : 1,
-                              (index % 7 == 0) ? 1 : 1,
-                            )
-                          : StaggeredTile.count(
-                              (index % 7 == 0) ? 2 : 1,
-                              (index % 7 == 0) ? 2 : 1,
-                            ),
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
-                );
-              },
-            ),
+        future: FirebaseFirestore.instance.collection('posts').get(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return MasonryGridView.count(
+            crossAxisCount: 3,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            itemCount: (snapshot.data! as dynamic).docs.length,
+            itemBuilder: (context, index) =>Image.network(
+                (snapshot.data! as dynamic).docs[index]['postUrl'],
+              fit: BoxFit.cover,
+            ),);
+        },
+      ),
     );
   }
 }

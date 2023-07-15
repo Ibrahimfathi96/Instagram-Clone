@@ -22,7 +22,7 @@ class AuthMethods {
     required String password,
     required String userName,
     required String bio,
-    Uint8List? file,
+    required Uint8List? file,
   }) async {
     String res = "something went wrong with your inputs, try again.";
     try {
@@ -33,7 +33,9 @@ class AuthMethods {
           file != null) {
         //register
         UserCredential credential = await _auth.createUserWithEmailAndPassword(
-            email: email, password: password);
+          email: email,
+          password: password,
+        );
         String photoUrl = await StorageMethods()
             .uploadImageToStorage("profilePics", file!, false);
         //add user to our database
@@ -50,6 +52,8 @@ class AuthMethods {
               myUser.toJson(),
             );
         res = 'success';
+      }else{
+        res = "all the fields are required";
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -74,7 +78,7 @@ class AuthMethods {
         );
         res = "successfully logged in";
       } else {
-        res = "all Fields are required";
+        res = "all the Fields are required";
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -88,8 +92,7 @@ class AuthMethods {
     return res;
   }
 
-  Future<void> signOut()async{
+  Future<void> signOut() async {
     await _auth.signOut();
   }
-
 }

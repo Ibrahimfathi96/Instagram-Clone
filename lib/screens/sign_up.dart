@@ -65,26 +65,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
 
     if (res != 'success') {
-      if (!mounted) return;
-      showSnakeBar(context, res);
+      setState(() {
+        _isLoading = false;
+      });
+      if (context.mounted) {
+        showSnakeBar(context, res);
+      }
     } else {
-      if (!mounted) return;
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const ResponsiveLayout(
-            mobileScreenLayout: MobileScreenLayout(),
-            webScreenLayout: WebScreenLayout(),
+      setState(() {
+        _isLoading = false;
+      });
+      if (context.mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const ResponsiveLayout(
+              mobileScreenLayout: MobileScreenLayout(),
+              webScreenLayout: WebScreenLayout(),
+            ),
           ),
-        ),
-      );
+          (route) => false,
+        );
+      }
     }
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.sizeOf(context).height;
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -94,16 +101,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
             physics: BouncingScrollPhysics(),
             children: [
               SizedBox(
-                height: MediaQuery.sizeOf(context).height / 16,
+                height: height / 16,
               ),
               //svg instagram image
               SvgPicture.asset(
                 "assets/ic_instagram.svg",
                 color: primaryColor,
-                height: MediaQuery.sizeOf(context).height / 14,
+                height: height / 14,
               ),
               SizedBox(
-                height: MediaQuery.sizeOf(context).height / 16,
+                height: height / 16,
               ),
               //circular widget to accept and show out accepted file
               Center(
@@ -111,9 +118,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: [
                     _image != null
                         ? CircleAvatar(
-                            radius: 64, backgroundImage: MemoryImage(_image!))
-                        : const CircleAvatar(
-                            radius: 64,
+                            radius: height / 14,
+                            backgroundImage: MemoryImage(_image!),
+                          )
+                        : CircleAvatar(
+                            radius: height / 14,
                             backgroundImage: AssetImage(
                               "assets/pp.jpg",
                             ),
@@ -130,7 +139,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               SizedBox(
-                height: MediaQuery.sizeOf(context).height / 36,
+                height: height / 36,
               ),
               //text form field for user name
               CustomTextField(
@@ -139,7 +148,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 textInputType: TextInputType.text,
               ),
               SizedBox(
-                height: MediaQuery.sizeOf(context).height / 36,
+                height: height / 36,
               ),
               //text form field for email
               CustomTextField(
@@ -148,7 +157,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 textInputType: TextInputType.emailAddress,
               ),
               SizedBox(
-                height: MediaQuery.sizeOf(context).height / 36,
+                height: height / 36,
               ),
               //text form field for password
               CustomTextField(
@@ -158,7 +167,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 isPass: true,
               ),
               SizedBox(
-                height: MediaQuery.sizeOf(context).height / 36,
+                height: height / 36,
               ),
               //text field for user bio
               CustomTextField(
@@ -167,7 +176,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 textInputType: TextInputType.text,
               ),
               SizedBox(
-                height: MediaQuery.sizeOf(context).height / 36,
+                height: height / 36,
               ),
               //login button
               InkWell(
@@ -197,7 +206,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               SizedBox(
-                height: MediaQuery.sizeOf(context).height / 7,
+                height: height / 7,
               ),
               //transition to sign up/in screen
               Row(

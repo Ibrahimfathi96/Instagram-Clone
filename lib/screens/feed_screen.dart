@@ -12,13 +12,14 @@ class FeedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
     return Scaffold(
-      appBar: MediaQuery.sizeOf(context).width > webScreenSize
+      backgroundColor:
+          width > webScreenSize ? webBackgroundColor : mobileBackgroundColor,
+      appBar: width > webScreenSize
           ? null
           : AppBar(
-              backgroundColor: MediaQuery.sizeOf(context).width > webScreenSize
-                  ? webBackgroundColor
-                  : mobileBackgroundColor,
+              backgroundColor: mobileBackgroundColor,
               centerTitle: false,
               automaticallyImplyLeading: false,
               actions: [
@@ -32,7 +33,7 @@ class FeedScreen extends StatelessWidget {
               title: SvgPicture.asset(
                 Assets.assetsIcInstagram,
                 color: primaryColor,
-                height: 30,
+                height: 32,
               ),
             ),
       body: StreamBuilder(
@@ -49,12 +50,11 @@ class FeedScreen extends StatelessWidget {
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) => Container(
               margin: EdgeInsets.symmetric(
-                horizontal: MediaQuery.sizeOf(context).width > webScreenSize
-                    ? MediaQuery.sizeOf(context).width * 0.3
+                horizontal: width > webScreenSize
+                    ? width * 0.3
                     : 0,
-                vertical: MediaQuery.sizeOf(context).width > webScreenSize
-                    ? 15
-                    : 0,
+                vertical:
+                    width > webScreenSize ? 15 : 0,
               ),
               child: PostCard(
                 snap: snapshot.data!.docs[index].data(),

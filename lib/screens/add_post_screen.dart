@@ -21,11 +21,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   bool _isLoading = false;
 
-  void postImage(
-    String uid,
-    String userName,
-    String profileImage,
-  ) async {
+  void postImage(String uid, String userName, String profileImage) async {
     setState(() {
       _isLoading = true;
     });
@@ -41,22 +37,24 @@ class _AddPostScreenState extends State<AddPostScreen> {
         setState(() {
           _isLoading = false;
         });
-        showSnakeBar(context, "Posted!");
+        if (context.mounted) {
+          showSnakeBar(context, "Posted!");
+        }
         clearImage();
       } else {
-        setState(() {
-          _isLoading = false;
-        });
-        showSnakeBar(context, "${res.toString()}");
+        if (context.mounted) {
+          showSnakeBar(context, "${res.toString()}");
+        }
       }
     } catch (error) {
+      setState(() {
+        _isLoading = false;
+      });
       showSnakeBar(context, "${error.toString()}");
     }
   }
 
-  _selectImage(
-    BuildContext context,
-  ) async {
+  _selectImage(BuildContext context) async {
     return showDialog(
       context: context,
       builder: (context) => SimpleDialog(
@@ -84,7 +82,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
           SimpleDialogOption(
             padding: EdgeInsets.all(20),
             child: Text(
-              "Choose From Gallery",
+              "Choose from Gallery",
               textAlign: TextAlign.center,
             ),
             onPressed: () async {
@@ -135,7 +133,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 IconButton(
                   onPressed: () => _selectImage(context),
                   icon: Icon(
-                    Icons.upload,size: 40,
+                    Icons.upload,
+                    size: 40,
                   ),
                 ),
                 Text(
@@ -223,7 +222,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     ),
                     Divider(),
                   ],
-                )
+                ),
               ],
             ),
           );

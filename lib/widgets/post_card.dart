@@ -198,7 +198,7 @@ class _PostCardState extends State<PostCard> {
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => CommentsScreen(
-                      snap: widget.snap,
+                      postId: widget.snap,
                     ),
                   ),
                 ),
@@ -265,7 +265,7 @@ class _PostCardState extends State<PostCard> {
                 InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => CommentsScreen(snap: widget.snap),
+                      builder: (context) => CommentsScreen(postId: widget.snap),
                     ));
                   },
                   child: Container(

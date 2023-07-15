@@ -42,32 +42,42 @@ class _LoginScreenState extends State<LoginScreen> {
     String res = await AuthMethods().userLogin(
         email: _emailController.text, password: _passwordController.text);
     if (res == "successfully logged in") {
-      if (!mounted) return;
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const ResponsiveLayout(
-            mobileScreenLayout: MobileScreenLayout(),
-            webScreenLayout: WebScreenLayout(),
+      if (context.mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const ResponsiveLayout(
+              mobileScreenLayout: MobileScreenLayout(),
+              webScreenLayout: WebScreenLayout(),
+            ),
           ),
-        ),
-      );
+          (route) => false,
+        );
+      }
+      setState(() {
+        _isLoading = false;
+      });
     } else {
-      if (!mounted) return;
-      showSnakeBar(context, res);
+      setState(() {
+        _isLoading = false;
+      });
+      if(context.mounted){
+        showSnakeBar(context, res);
+      }
     }
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.sizeOf(context).height;
+    final width = MediaQuery.sizeOf(context).width;
+
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: MediaQuery.sizeOf(context).width>webScreenSize?
-          EdgeInsets.symmetric(horizontal: MediaQuery.sizeOf(context).width/3):
-          const EdgeInsets.symmetric(horizontal: 32),
+          padding: width > webScreenSize
+              ? EdgeInsets.symmetric(
+                  horizontal: width / 3)
+              : const EdgeInsets.symmetric(horizontal: 32),
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -80,10 +90,10 @@ class _LoginScreenState extends State<LoginScreen> {
               SvgPicture.asset(
                 "assets/ic_instagram.svg",
                 color: primaryColor,
-                height: 64,
+                height: height / 14,
               ),
-              const SizedBox(
-                height: 64,
+              SizedBox(
+                height: height / 14,
               ),
               //text form field for email
               CustomTextField(
@@ -91,8 +101,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 textEditingController: _emailController,
                 textInputType: TextInputType.emailAddress,
               ),
-              const SizedBox(
-                height: 24,
+              SizedBox(
+                height: height / 36,
               ),
               //text form field for password
               CustomTextField(
@@ -101,8 +111,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 textInputType: TextInputType.visiblePassword,
                 isPass: true,
               ),
-              const SizedBox(
-                height: 24,
+              Align(
+                alignment: AlignmentDirectional.centerEnd,
+                child: TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "Forget Password?",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
               ),
               //login button
               InkWell(

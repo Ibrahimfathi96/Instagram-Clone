@@ -54,35 +54,35 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
             onPressed: () => navigateOnTapping(0),
             icon: Icon(
               Icons.home,
-              color: _page == 0 ? primaryColor : secondaryColor,
+              color: (_page == 0) ? primaryColor : secondaryColor,
             ),
           ),
           IconButton(
             onPressed: () => navigateOnTapping(1),
             icon: Icon(
               Icons.search,
-              color: _page == 1 ? primaryColor : secondaryColor,
+              color: (_page == 1) ? primaryColor : secondaryColor,
             ),
           ),
           IconButton(
             onPressed: () => navigateOnTapping(2),
             icon: Icon(
               Icons.add_a_photo,
-              color: _page == 2 ? primaryColor : secondaryColor,
+              color: (_page == 2) ? primaryColor : secondaryColor,
             ),
           ),
           IconButton(
             onPressed: () => navigateOnTapping(3),
             icon: Icon(
               Icons.favorite,
-              color: _page == 3 ? primaryColor : secondaryColor,
+              color: (_page == 3) ? primaryColor : secondaryColor,
             ),
           ),
           IconButton(
             onPressed: () => navigateOnTapping(4),
             icon: Icon(
               Icons.person,
-              color: _page == 4 ? primaryColor : secondaryColor,
+              color: (_page == 4) ? primaryColor : secondaryColor,
             ),
           ),
           IconButton(
@@ -99,6 +99,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
         ),
       ),
       body: PageView(
+        physics: BouncingScrollPhysics(),
         children: homeScreenItems,
         controller: pageController,
         onPageChanged: onPageChanged,

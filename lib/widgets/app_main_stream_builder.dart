@@ -24,14 +24,7 @@ class AppMainStreamBuilder extends StatelessWidget {
             );
           } else if (snapshot.hasError) {
             return Center(
-              child: Column(
-                children: [
-                  const CircularProgressIndicator(
-                    color: primaryColor,
-                  ),
-                  Text("${snapshot.error}"),
-                ],
-              ),
+              child: Text("${snapshot.error}"),
             );
           }
         }

@@ -47,30 +47,37 @@ class FirebaseFireStoreMethods {
   }
 
   //Post likes
-  Future<void> likePost(String postId, String uid, List likes) async {
+  Future<String> likePost(String postId, String uid, List likes) async {
+    String res = "something went wrong.";
     try {
       if (likes.contains(uid)) {
+        //if the likes list contains the user uid, we need to remove it(dislike)
         await _fireStore.collection('posts').doc(postId).update({
           'likes': FieldValue.arrayRemove([uid]),
         });
       } else {
+        //otherwise we need ti add uid to the likes list (like)
         await _fireStore.collection('posts').doc(postId).update({
           'likes': FieldValue.arrayUnion([uid]),
         });
       }
+      res = 'success';
     } catch (error) {
-      debugPrint("like posts errors ${error.toString()}");
+      res = error.toString();
+      debugPrint("like posts errors $res");
     }
+    return res;
   }
 
   //Post Comments
-  Future<void> postComment(
+  Future<String> postComment(
     String postId,
     String commentContent,
     String uid,
     String profileImage,
     String userName,
   ) async {
+    String res = 'something went wrong';
     try {
       if (commentContent.isNotEmpty) {
         String commentId = Uuid().v1();
@@ -88,23 +95,31 @@ class FirebaseFireStoreMethods {
           "datePublished": DateTime.now(),
           "likes": [],
         });
+        res = "success";
       } else {
+        res = "Please enter a text";
         debugPrint("Text is Empty.");
       }
     } catch (error) {
-      debugPrint("Post Comment Error ${error.toString()}");
+      res = error.toString();
+      debugPrint("Post Comment Error $res");
     }
+    return res;
   }
 
   //Deleting Post
-  Future<void> deletePost(
+  Future<String> deletePost(
     String postId,
   ) async {
+    String res = 'something went wrong';
     try {
       await _fireStore.collection('posts').doc(postId).delete();
+      res = 'success';
     } catch (error) {
-      debugPrint("deleting posts error ${error.toString()}");
+      res = error.toString();
+      debugPrint("deleting posts error $res");
     }
+    return res;
   }
 
   Future<void> followUser(String uid, String followId) async {
