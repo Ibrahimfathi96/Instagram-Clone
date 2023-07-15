@@ -1,4 +1,15 @@
-Instagram Clone is my application where I'm applying on how to use Firebase services
-Auth Methods - Firestore - Firebase storage.
-Statemanagement in the application is provider
-basic architecture and After finishing all the features, I'll apply mvvm and maybe clean arch.
+Instagram Clone:
+
+A completely Responsive Instagram App- Works on Android, iOS & Web!
+
+Features:
+
+Responsive Instagram UI - Email & Password Authentication - Share Posts with Caption - Display Posts with Caption
+Like & Comment on Posts - Search Users - Follow Users - Display User Posts, Followers & Following
+EVERYTHING REAL TIME - Sign Out.
+
+Tech Used:
+
+Server: Firebase Auth, Firebase Storage, Firebase Firestore
+
+Client: Flutter, Provider
