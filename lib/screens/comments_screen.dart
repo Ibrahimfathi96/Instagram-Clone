@@ -29,7 +29,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
   void postComment(String uid, String userName, String profileImage) async {
     try {
       String response = await FirebaseFireStoreMethods().postComment(
-        widget.postId,
+        widget.postId['postId'],
         _commentController.text,
         uid,
         profileImage,
@@ -65,7 +65,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('posts')
-            .doc(widget.postId)
+            .doc(widget.postId['postId'])
             .collection('comments')
             .orderBy("datePublished", descending: true)
             .snapshots(),
